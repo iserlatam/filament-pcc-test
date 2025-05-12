@@ -1,0 +1,40 @@
+created:
+    - database/factories/CertificadoFactory.php
+    - database/factories/SedeFactory.php
+    - database/factories/EntrenadorFactory.php
+    - database/factories/EstudianteFactory.php
+    - database/factories/EmpresaFactory.php
+    - database/factories/CursoFactory.php
+    - database/factories/NivelFactory.php
+    - database/factories/AreaFactory.php
+    - database/factories/CuponFactory.php
+    - database/migrations/2024_10_19_224059_create_certificados_table.php
+    - database/migrations/2024_10_19_224100_create_sedes_table.php
+    - database/migrations/2024_10_19_224101_create_entrenadors_table.php
+    - database/migrations/2024_10_19_224102_create_estudiantes_table.php
+    - database/migrations/2024_10_19_224103_create_empresas_table.php
+    - database/migrations/2024_10_19_224104_create_cursos_table.php
+    - database/migrations/2024_10_19_224105_create_nivels_table.php
+    - database/migrations/2024_10_19_224106_create_areas_table.php
+    - database/migrations/2024_10_19_224107_create_cupons_table.php
+    - database/migrations/2024_10_19_224108_create_curso_estudiante_table.php
+    - app/Models/Certificado.php
+    - app/Models/Sede.php
+    - app/Models/Entrenador.php
+    - app/Models/Estudiante.php
+    - app/Models/Empresa.php
+    - app/Models/Curso.php
+    - app/Models/Nivel.php
+    - app/Models/Area.php
+    - app/Models/Cupon.php
+models:
+    User: {  }
+    Certificado: { id: uuid, codigo: string, vencimiento: 'boolean nullable default:false', fecha_vencimiento: 'date nullable', observaciones: 'text nullable', estado: 'enum:aprobado,reprobado,revision,aplazado default:revision nullable', curso_id: unsignedInteger, estudiante_id: unsignedInteger, sede_id: unsignedInteger, relationships: { belongsTo: 'Estudiante, Curso, Sede' } }
+    Sede: { nombre: 'string nullable', dpto: 'string nullable', ciudad: 'string nullable', direccion: 'string nullable', coordinador: 'string nullable', relationships: { hasOne: Estudiante, hasMany: Entrenador } }
+    Entrenador: { nombre_completo: string, doc_tipo: 'enum:ti,cc,ce,pasaporte', doc_numero: string, fecha_de_nacimiento: date, licencia: 'string nullable', escuela: 'string nullable', direccion: 'string nullable', sede_id: 'string nullable', relationships: { hasMany: Curso, belongsTo: Sede } }
+    Estudiante: { nombre_completo: string, doc_tipo: 'enum:ti,cc,ce,pasaporte', doc_numero: string, fecha_de_nacimiento: date, direccion: string, sede_id: unsignedInteger, empresa_id: 'unsignedInteger nullable', relationships: { hasOne: Certificado, belongsTo: 'Sede, Empresa', belongsToMany: Curso } }
+    Empresa: { nombre: string, nit: string, campo: 'string nullable', dpto: 'string nullable', ciudad: 'string nullable', direccion: 'string nullable', rep_legal: 'string nullable', arl: 'string nullable', relationships: { hasMany: Estudiante } }
+    Curso: { codigo: string, titulacion: string, duracion: string, valor: double, estado: 'enum:abierto,lleno,cerrado default:abierto nullable', limite_estudiantes: 'smallint default:50 nullable', estudiantes: 'smallint default:0 nullable', area_id: unsignedInteger, entrenador_id: unsignedInteger, nivel_id: unsignedInteger, cupon_id: 'unsignedInteger nullable', relationships: { belongsTo: 'Nivel, Area, Cupon, Entrenador', hasMany: Certificado, belongsToMany: Estudiante } }
+    Nivel: { etiqueta: string, relationships: { hasMany: Curso } }
+    Area: { nombre: string, relationships: { hasMany: Curso } }
+    Cupon: { id: uuid, nombre: 'string nullable unique', estado: 'enum:activo,inactivo default:inactivo nullable', total_desc: int, tipo_desc: 'enum:fijo,porcentaje', relationships: { hasMany: Curso } }

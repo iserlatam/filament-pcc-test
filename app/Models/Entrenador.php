@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Estudiante extends Model
+class Entrenador extends Model
 {
     use HasFactory;
 
@@ -22,9 +21,10 @@ class Estudiante extends Model
         'doc_tipo',
         'doc_numero',
         'fecha_de_nacimiento',
+        'licencia',
+        'escuela',
         'direccion',
         'sede_id',
-        'empresa_id',
     ];
 
     /**
@@ -36,26 +36,15 @@ class Estudiante extends Model
         'id' => 'integer',
         'fecha_de_nacimiento' => 'date',
         'sede_id' => 'integer',
-        'empresa_id' => 'integer',
     ];
 
-    public function certificado(): HasOne
+    public function cursos(): HasMany
     {
-        return $this->hasOne(Certificado::class);
+        return $this->hasMany(Curso::class);
     }
 
     public function sede(): BelongsTo
     {
         return $this->belongsTo(Sede::class);
-    }
-
-    public function empresa(): BelongsTo
-    {
-        return $this->belongsTo(Empresa::class);
-    }
-
-    public function cursos(): BelongsToMany
-    {
-        return $this->belongsToMany(Curso::class);
     }
 }

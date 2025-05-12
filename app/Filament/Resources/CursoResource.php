@@ -4,9 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CursoResource\Pages;
 use App\Filament\Resources\CursoResource\RelationManagers;
-use App\Models\Area;
 use App\Models\Curso;
-use App\Models\Nivel;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -25,12 +23,12 @@ class CursoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('nivel_id')
-                    ->label('Nivel')
-                    ->relationship('nivel', 'etiqueta')
-                    ->options(Nivel::all()->pluck('etiqueta', 'id'))
-                    ->searchable()
-                    ->required(),
+                Forms\Components\TextInput::make('codigo')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('titulacion')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('duracion')
                     ->required()
                     ->maxLength(255),
@@ -38,16 +36,20 @@ class CursoResource extends Resource
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('estado')
-                    ->required(),
-                Forms\Components\TextInput::make('codigo')
+                    ->default('abierto'),
+                Forms\Components\TextInput::make('limite_estudiantes')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->default(50),
                 Forms\Components\Select::make('area_id')
-                    ->label('Área')
                     ->relationship('area', 'nombre')
-                    ->options(Area::all()->pluck('nombre', 'id'))
-                    ->searchable()
                     ->required(),
+                Forms\Components\Select::make('nivel_id')
+                    ->relationship('nivel', 'etiqueta')
+                    ->required(),
+                Forms\Components\Select::make('cupon_id')
+                    ->relationship('cupon', 'nombre')
+                    ->default(null),
             ]);
     }
 
@@ -55,18 +57,27 @@ class CursoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nivel.id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('codigo')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('titulacion')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('duracion')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('valor')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('estado'),
-                Tables\Columns\TextColumn::make('codigo')
+                Tables\Columns\TextColumn::make('limite_estudiantes')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('estudiantes')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('area.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('nivel.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cupon.id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

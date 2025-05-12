@@ -17,20 +17,27 @@ class EstudianteResource extends Resource
 {
     protected static ?string $model = Estudiante::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-user-group';
+
+    protected static ?string $navigationGroup = 'Cursos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nombre_completo')
+                Forms\Components\TextInput::make('nombre')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('apellidos')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('doc_tipo')
                     ->required(),
                 Forms\Components\TextInput::make('doc_numero')
                     ->required()
-                    ->maxLength(255),
+                    ->numeric(),
                 Forms\Components\DatePicker::make('fecha_de_nacimiento')
                     ->required(),
                 Forms\Components\TextInput::make('direccion')
@@ -39,12 +46,6 @@ class EstudianteResource extends Resource
                 Forms\Components\Select::make('curso_id')
                     ->relationship('curso', 'id')
                     ->required(),
-                Forms\Components\Select::make('sede_id')
-                    ->relationship('sede', 'id')
-                    ->required(),
-                Forms\Components\Select::make('empresa_id')
-                    ->relationship('empresa', 'id')
-                    ->default(null),
             ]);
     }
 
@@ -52,23 +53,20 @@ class EstudianteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nombre_completo')
+                Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('apellidos')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('doc_tipo'),
                 Tables\Columns\TextColumn::make('doc_numero')
-                    ->searchable(),
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('fecha_de_nacimiento')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('direccion')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('curso.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sede.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('empresa.id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

@@ -26,12 +26,11 @@ class CertificadoFactory extends Factory
             'codigo' => $this->faker->word(),
             'vencimiento' => $this->faker->boolean(),
             'fecha_vencimiento' => $this->faker->date(),
-            'dpto' => $this->faker->word(),
-            'ciudad' => $this->faker->word(),
             'observaciones' => $this->faker->text(),
-            'estado' => $this->faker->randomElement(["aprobado","reprobado","pendiente","aplazado"]),
+            'estado' => $this->faker->randomElement(["aprobado","reprobado","revision","aplazado"]),
             'curso_id' => ::factory(),
             'estudiante_id' => Estudiante::factory(),
+            'sede_id' => ::factory(),
         ];
     }
 }

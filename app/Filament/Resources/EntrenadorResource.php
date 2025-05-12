@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EstudianteResource\Pages;
-use App\Filament\Resources\EstudianteResource\RelationManagers;
-use App\Models\Estudiante;
+use App\Filament\Resources\EntrenadorResource\Pages;
+use App\Filament\Resources\EntrenadorResource\RelationManagers;
+use App\Models\Entrenador;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class EstudianteResource extends Resource
+class EntrenadorResource extends Resource
 {
-    protected static ?string $model = Estudiante::class;
+    protected static ?string $model = Entrenador::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -33,18 +33,18 @@ class EstudianteResource extends Resource
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('fecha_de_nacimiento')
                     ->required(),
+                Forms\Components\TextInput::make('licencia')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('escuela')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('direccion')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('curso_id')
-                    ->relationship('curso', 'id')
-                    ->required(),
                 Forms\Components\Select::make('sede_id')
                     ->relationship('sede', 'id')
                     ->required(),
-                Forms\Components\Select::make('empresa_id')
-                    ->relationship('empresa', 'id')
-                    ->default(null),
             ]);
     }
 
@@ -60,15 +60,13 @@ class EstudianteResource extends Resource
                 Tables\Columns\TextColumn::make('fecha_de_nacimiento')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('licencia')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('escuela')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('direccion')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('curso.id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('sede.id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('empresa.id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -103,9 +101,9 @@ class EstudianteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEstudiantes::route('/'),
-            'create' => Pages\CreateEstudiante::route('/create'),
-            'edit' => Pages\EditEstudiante::route('/{record}/edit'),
+            'index' => Pages\ListEntrenadors::route('/'),
+            'create' => Pages\CreateEntrenador::route('/create'),
+            'edit' => Pages\EditEntrenador::route('/{record}/edit'),
         ];
     }
 }

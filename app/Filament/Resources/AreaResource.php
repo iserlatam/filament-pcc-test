@@ -7,7 +7,6 @@ use App\Filament\Resources\AreaResource\RelationManagers;
 use App\Models\Area;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,11 +17,7 @@ class AreaResource extends Resource
 {
     protected static ?string $model = Area::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
-
-    protected static ?string $activeNavigationIcon = 'heroicon-s-cube';
-
-    protected static ?string $navigationGroup = 'Cursos';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -76,13 +71,5 @@ class AreaResource extends Resource
             'create' => Pages\CreateArea::route('/create'),
             'edit' => Pages\EditArea::route('/{record}/edit'),
         ];
-    }
-
-    protected function getCreatedNotification(): ?Notification
-    {
-        return Notification::make()
-            ->success()
-            ->title('Area creada éxitosamente')
-            ->body('Sigue creando más areas de acuerdo a la necesidad!');
     }
 }

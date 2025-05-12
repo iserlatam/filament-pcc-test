@@ -7,7 +7,6 @@ use App\Filament\Resources\CertificadoResource\RelationManagers;
 use App\Models\Certificado;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Components\Tab;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,29 +17,29 @@ class CertificadoResource extends Resource
 {
     protected static ?string $model = Certificado::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
-
-    protected static ?string $activeNavigationIcon = 'heroicon-s-bookmark';
-
-    protected static ?string $navigationGroup = 'Certificaciones';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('estudiante_id')
-                    ->relationship('estudiante', 'id')
+                Forms\Components\TextInput::make('codigo')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Toggle::make('vencimiento'),
+                Forms\Components\DatePicker::make('fecha_vencimiento'),
+                Forms\Components\Textarea::make('observaciones')
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('estado')
                     ->required(),
-                Forms\Components\TextInput::make('departamento')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('ciudad')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\Select::make('curso_id')
                     ->relationship('curso', 'id')
                     ->required(),
-                Forms\Components\TextInput::make('estado')
+                Forms\Components\Select::make('estudiante_id')
+                    ->relationship('estudiante', 'id')
+                    ->required(),
+                Forms\Components\Select::make('sede_id')
+                    ->relationship('sede', 'id')
                     ->required(),
             ]);
     }
@@ -49,17 +48,23 @@ class CertificadoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('estudiante.id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('codigo')
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('vencimiento')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('fecha_vencimiento')
+                    ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('departamento')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ciudad')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('estado'),
                 Tables\Columns\TextColumn::make('curso.id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('estado'),
+                Tables\Columns\TextColumn::make('estudiante.id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('sede.id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -97,15 +102,4 @@ class CertificadoResource extends Resource
             'edit' => Pages\EditCertificado::route('/{record}/edit'),
         ];
     }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return static::getModel()::count() > 10 ? 'warning' : 'primary';
-    }
-
 }

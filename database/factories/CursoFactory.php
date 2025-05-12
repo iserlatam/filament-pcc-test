@@ -23,12 +23,17 @@ class CursoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nivel_id' => Nivel::factory(),
+            'codigo' => $this->faker->word(),
+            'titulacion' => $this->faker->word(),
             'duracion' => $this->faker->word(),
             'valor' => $this->faker->randomFloat(0, 0, 9999999999.),
             'estado' => $this->faker->randomElement(["abierto","lleno","cerrado"]),
-            'codigo' => $this->faker->word(),
+            'limite_estudiantes' => $this->faker->word(),
+            'estudiantes' => $this->faker->word(),
             'area_id' => ::factory(),
+            'entrenador_id' => ::factory(),
+            'nivel_id' => Nivel::factory(),
+            'cupon_id' => ::factory(),
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NivelResource\Pages;
-use App\Filament\Resources\NivelResource\RelationManagers;
-use App\Models\Nivel;
+use App\Filament\Resources\CuponResource\Pages;
+use App\Filament\Resources\CuponResource\RelationManagers;
+use App\Models\Cupon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class NivelResource extends Resource
+class CuponResource extends Resource
 {
-    protected static ?string $model = Nivel::class;
+    protected static ?string $model = Cupon::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,9 +23,16 @@ class NivelResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('etiqueta')
+                Forms\Components\TextInput::make('nombre')
+                    ->maxLength(255)
+                    ->default(null),
+                Forms\Components\TextInput::make('estado')
+                    ->required(),
+                Forms\Components\TextInput::make('total_desc')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('tipo_desc')
+                    ->required(),
             ]);
     }
 
@@ -33,8 +40,12 @@ class NivelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('etiqueta')
+                Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('estado'),
+                Tables\Columns\TextColumn::make('total_desc')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tipo_desc'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -67,9 +78,9 @@ class NivelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNivels::route('/'),
-            'create' => Pages\CreateNivel::route('/create'),
-            'edit' => Pages\EditNivel::route('/{record}/edit'),
+            'index' => Pages\ListCupons::route('/'),
+            'create' => Pages\CreateCupon::route('/create'),
+            'edit' => Pages\EditCupon::route('/{record}/edit'),
         ];
     }
 }

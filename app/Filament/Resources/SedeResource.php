@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NivelResource\Pages;
-use App\Filament\Resources\NivelResource\RelationManagers;
-use App\Models\Nivel;
+use App\Filament\Resources\SedeResource\Pages;
+use App\Filament\Resources\SedeResource\RelationManagers;
+use App\Models\Sede;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class NivelResource extends Resource
+class SedeResource extends Resource
 {
-    protected static ?string $model = Nivel::class;
+    protected static ?string $model = Sede::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,7 +23,19 @@ class NivelResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('etiqueta')
+                Forms\Components\TextInput::make('nombre')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('dpto')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('ciudad')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('direccion')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('coordinador')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -33,7 +45,15 @@ class NivelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('etiqueta')
+                Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('dpto')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('ciudad')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('direccion')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('coordinador')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -67,9 +87,9 @@ class NivelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNivels::route('/'),
-            'create' => Pages\CreateNivel::route('/create'),
-            'edit' => Pages\EditNivel::route('/{record}/edit'),
+            'index' => Pages\ListSedes::route('/'),
+            'create' => Pages\CreateSede::route('/create'),
+            'edit' => Pages\EditSede::route('/{record}/edit'),
         ];
     }
 }

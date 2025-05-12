@@ -2,28 +2,33 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NivelResource\Pages;
-use App\Filament\Resources\NivelResource\RelationManagers;
-use App\Models\Nivel;
+use App\Filament\Resources\AreaResource\Pages;
+use App\Filament\Resources\AreaResource\RelationManagers;
+use App\Models\Area;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class NivelResource extends Resource
+class AreaResource extends Resource
 {
-    protected static ?string $model = Nivel::class;
+    protected static ?string $model = Area::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-cube';
+
+    protected static ?string $navigationGroup = 'Cursos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('etiqueta')
+                Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -33,7 +38,7 @@ class NivelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('etiqueta')
+                Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -67,9 +72,17 @@ class NivelResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNivels::route('/'),
-            'create' => Pages\CreateNivel::route('/create'),
-            'edit' => Pages\EditNivel::route('/{record}/edit'),
+            'index' => Pages\ListAreas::route('/'),
+            'create' => Pages\CreateArea::route('/create'),
+            'edit' => Pages\EditArea::route('/{record}/edit'),
         ];
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('Area creada éxitosamente')
+            ->body('Sigue creando más areas de acuerdo a la necesidad!');
     }
 }

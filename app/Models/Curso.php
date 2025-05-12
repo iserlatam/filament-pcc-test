@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Curso extends Model
@@ -17,12 +18,17 @@ class Curso extends Model
      * @var array
      */
     protected $fillable = [
-        'nivel_id',
+        'codigo',
+        'titulacion',
         'duracion',
         'valor',
         'estado',
-        'codigo',
+        'limite_estudiantes',
+        'estudiantes',
         'area_id',
+        'entrenador_id',
+        'nivel_id',
+        'cupon_id',
     ];
 
     /**
@@ -32,9 +38,11 @@ class Curso extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'nivel_id' => 'integer',
-        'valor' => 'decimal',
+        'valor' => 'double',
         'area_id' => 'integer',
+        'entrenador_id' => 'integer',
+        'nivel_id' => 'integer',
+        'cupon_id' => 'integer',
     ];
 
     public function nivel(): BelongsTo
@@ -47,8 +55,23 @@ class Curso extends Model
         return $this->belongsTo(Area::class);
     }
 
-    public function estudiantes(): HasMany
+    public function cupon(): BelongsTo
     {
-        return $this->hasMany(Estudiante::class);
+        return $this->belongsTo(Cupon::class);
+    }
+
+    public function entrenador(): BelongsTo
+    {
+        return $this->belongsTo(Entrenador::class);
+    }
+
+    public function certificados(): HasMany
+    {
+        return $this->hasMany(Certificado::class);
+    }
+
+    public function estudiantes(): BelongsToMany
+    {
+        return $this->belongsToMany(Estudiante::class);
     }
 }

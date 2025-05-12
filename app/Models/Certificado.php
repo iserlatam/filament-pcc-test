@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Certificado extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -19,12 +20,11 @@ class Certificado extends Model
         'codigo',
         'vencimiento',
         'fecha_vencimiento',
-        'dpto',
-        'ciudad',
         'observaciones',
         'estado',
         'curso_id',
         'estudiante_id',
+        'sede_id',
     ];
 
     /**
@@ -33,11 +33,11 @@ class Certificado extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
         'vencimiento' => 'boolean',
         'fecha_vencimiento' => 'date',
         'curso_id' => 'integer',
         'estudiante_id' => 'integer',
+        'sede_id' => 'integer',
     ];
 
     public function estudiante(): BelongsTo
@@ -48,5 +48,10 @@ class Certificado extends Model
     public function curso(): BelongsTo
     {
         return $this->belongsTo(Curso::class);
+    }
+
+    public function sede(): BelongsTo
+    {
+        return $this->belongsTo(Sede::class);
     }
 }

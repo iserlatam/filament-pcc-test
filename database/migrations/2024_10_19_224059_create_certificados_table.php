@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certificados', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('codigo');
-            $table->boolean('vencimiento')->nullable();
+            $table->boolean('vencimiento')->nullable()->default(false);
             $table->date('fecha_vencimiento')->nullable();
-            $table->string('dpto');
-            $table->string('ciudad');
-            $table->text('observaciones');
-            $table->enum('estado', ["aprobado","reprobado","pendiente","aplazado"]);
+            $table->text('observaciones')->nullable();
+            $table->enum('estado', ["aprobado","reprobado","revision","aplazado"])->default('revision')->nullable();
             $table->foreignId('curso_id');
             $table->foreignId('estudiante_id');
+            $table->foreignId('sede_id');
             $table->timestamps();
         });
     }

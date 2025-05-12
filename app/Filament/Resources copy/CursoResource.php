@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EstudianteResource\Pages;
-use App\Filament\Resources\EstudianteResource\RelationManagers;
-use App\Models\Estudiante;
+use App\Filament\Resources\CursoResource\Pages;
+use App\Filament\Resources\CursoResource\RelationManagers;
+use App\Models\Area;
+use App\Models\Curso;
+use App\Models\Nivel;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +15,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class EstudianteResource extends Resource
+class CursoResource extends Resource
 {
-    protected static ?string $model = Estudiante::class;
+    protected static ?string $model = Curso::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,28 +25,29 @@ class EstudianteResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nombre_completo')
+                Forms\Components\Select::make('nivel_id')
+                    ->label('Nivel')
+                    ->relationship('nivel', 'etiqueta')
+                    ->options(Nivel::all()->pluck('etiqueta', 'id'))
+                    ->searchable()
+                    ->required(),
+                Forms\Components\TextInput::make('duracion')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('doc_tipo')
+                Forms\Components\TextInput::make('valor')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('estado')
                     ->required(),
-                Forms\Components\TextInput::make('doc_numero')
+                Forms\Components\TextInput::make('codigo')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('fecha_de_nacimiento')
+                Forms\Components\Select::make('area_id')
+                    ->label('Área')
+                    ->relationship('area', 'nombre')
+                    ->options(Area::all()->pluck('nombre', 'id'))
+                    ->searchable()
                     ->required(),
-                Forms\Components\TextInput::make('direccion')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('curso_id')
-                    ->relationship('curso', 'id')
-                    ->required(),
-                Forms\Components\Select::make('sede_id')
-                    ->relationship('sede', 'id')
-                    ->required(),
-                Forms\Components\Select::make('empresa_id')
-                    ->relationship('empresa', 'id')
-                    ->default(null),
             ]);
     }
 
@@ -52,23 +55,18 @@ class EstudianteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nombre_completo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('doc_tipo'),
-                Tables\Columns\TextColumn::make('doc_numero')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('fecha_de_nacimiento')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('direccion')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('curso.id')
+                Tables\Columns\TextColumn::make('nivel.id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sede.id')
+                Tables\Columns\TextColumn::make('duracion')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('valor')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('empresa.id')
+                Tables\Columns\TextColumn::make('estado'),
+                Tables\Columns\TextColumn::make('codigo')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('area.id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -103,9 +101,9 @@ class EstudianteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEstudiantes::route('/'),
-            'create' => Pages\CreateEstudiante::route('/create'),
-            'edit' => Pages\EditEstudiante::route('/{record}/edit'),
+            'index' => Pages\ListCursos::route('/'),
+            'create' => Pages\CreateCurso::route('/create'),
+            'edit' => Pages\EditCurso::route('/{record}/edit'),
         ];
     }
 }

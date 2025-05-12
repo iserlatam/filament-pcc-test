@@ -26,9 +26,10 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('/')
-            ->brandName('Punto de Control de Certificaciones')
+            ->path('app')
+            ->brandName('PCC')
             ->brandLogo('/img/pccLightLogo.svg')
+            ->brandLogoHeight("40px")
             ->darkModeBrandLogo('/img/pccDarkLogo.svg')
             ->login()
             ->colors([
@@ -41,12 +42,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->pages([
-                Pages\Inicio::class,
-            ])
+            ->pages([])
+            ->spa()
+            ->unsavedChangesAlerts()
+            ->globalSearch()
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\StatsOverview::class,
+                // Widgets\StatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,
